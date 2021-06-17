@@ -8,7 +8,7 @@ api_student = studentDto.api
 _student = studentDto.student
 
 
-@api_student.route('/')
+@api_student.route('/student')
 class StudentList(Resource):
     @api_student.doc('List of Students')
     @api_student.marshal_list_with(_student, envelope='data')
@@ -25,7 +25,7 @@ class StudentList(Resource):
         return new_student(data=data)
 
 
-@api_student.route('/<public_id>')
+@api_student.route('/student/<public_id>')
 @api_student.param('public_id', 'The User identifier')
 @api_student.response(404, 'User not found.')
 class Student(Resource):
@@ -60,7 +60,7 @@ class Student(Resource):
             api_student.abort(404)
 
 
-@api_student.route('/<string:name>')
+@api_student.route('/student/<string:name>')
 @api_student.param('name', 'The username')
 @api_student.response(404, 'User not found.')
 class StudentEmail(Resource):

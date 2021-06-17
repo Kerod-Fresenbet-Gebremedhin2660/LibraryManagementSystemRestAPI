@@ -28,7 +28,7 @@ def new_staff(data):
         return response_object, 409
 
 
-def updated_staff(data):
+def update_staff(data):
     staff = Staff.query.filter_by(isbn=data['staffId']).first()
     if not staff:
         newstaff = staff(

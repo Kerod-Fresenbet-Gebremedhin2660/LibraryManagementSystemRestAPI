@@ -1,14 +1,14 @@
 from flask import request, jsonify
 from flask_restx import Resource
 from ..utilities.dto import staffDto
-from ..service.staffService import get_all_staffs, get_staff, get_staff_by_name, new_staff, delete_staff, delete_staff_by_name
+from ..service.staffService import get_all_staffs, get_staff, get_staff_by_name, new_staff, delete_staff, delete_staff_by_name, update_staff
 
 
 api_staff = staffDto.api
 _staff = staffDto.staff
 
 
-@api_staff.route('/')
+@api_staff.route('/staff')
 class staffList(Resource):
     @api_staff.doc('List of Staff')
     @api_staff.marshal_list_with(_staff, envelope='data')
@@ -25,7 +25,7 @@ class staffList(Resource):
         return new_staff(data)
 
 
-@api_staff.route('/<public_id>')
+@api_staff.route('/staff/<public_id>')
 @api_staff.param('privateId', 'The private id of staff')
 @api_staff.response(404, 'staff not found.')
 class Staff(Resource):
@@ -50,8 +50,21 @@ class Staff(Resource):
             }
             return response_object
 
+    @api_staff.doc('update a staff member')
+    @api_staff.expect(_staff, validate=True)
+    @api_staff.marshal_with(_staff)
+    def update(self, publicId):
+        if get_staff(publicId):
+            return update_staff(publicId)
+        else:
+            response_object = {
+                'status': '404',
+                'message': 'The Staff doesn\'t exist'
+            }
+            return response_object
 
-@api_staff.route('/<name>')
+
+@api_staff.route('/staff/<name>')
 @api_staff.param('email', 'The email of staff')
 @api_staff.response(404, 'staff not found.')
 class Staff(Resource):
