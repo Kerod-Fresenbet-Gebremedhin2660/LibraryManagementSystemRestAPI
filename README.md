@@ -1,4 +1,4 @@
-# flask-rest
+# flask-rest-x
 The rest back end for library management system
 
 ## How to run
